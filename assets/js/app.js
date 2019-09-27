@@ -110,18 +110,25 @@ d3.csv("./assets/data/data.csv")
     // Step 10: Create Axes labels
     // ==============================      
     // Create the Poverty xAxis label
-    chartGroup.append("text")
+    let lPoverty = chartGroup.append("text")
       .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
       .attr("class", "axisText")
       .text("In Poverty (%)");
 
     // Create the Healthcare yAxis label
-    chartGroup.append("text")
+    let lHealthcare = chartGroup.append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 0 - margin.left + 40)
       .attr("x", 0 - (height / 2))
       .attr("dy", "1em")
       .attr("class", "axisText")
       .text("Lacks Healthcare(%)");
+
+     lPoverty 
+      .on("click", () => console.log("You clicked on Poverty!")); 
+
+      lHealthcare 
+      .on("click", () => console.log("You clicked on Healthcare!")); 
+
 
   });
