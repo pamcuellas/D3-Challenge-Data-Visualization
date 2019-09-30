@@ -29,7 +29,9 @@
   font-family: sans-serif;
   fill: #FFF;
   text-anchor: middle;
-  font-size: 8px;
+  font-size: 9px;
+  font-weight: bold;
+  pointer-events: none;
 }
 
 .stateCircle {
