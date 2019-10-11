@@ -37,29 +37,28 @@ var svg = d3.select("#scatter")
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-
+const axesArray = {
+  poverty:   { axis: "x", domain:[-1, 1], range:[ 0, width], tooltip: "Poverty"  },
+  age:       { axis: "x", domain:[-1, 1], range:[ 0, width], tooltip: "Age"      },
+  income:    { axis: "x", domain:[-2000, 2000], range:[ 0, width], tooltip: "Household"},
+  obesity:   { axis: "y", domain:[-2, 4], range:[ 0, width], tooltip: "Poverty"  },
+  smokes:    { axis: "y", domain:[-1, 2], range:[ 0, width], tooltip: "Age"      },
+  healthcare:{ axis: "y", domain:[-1, 2], range:[ 0, width], tooltip: "Household"},
+};
+  
 /*********************************************************************************************************************************** */
 // function used for updating x-scale var upon click on axis label
 function xScale(data, chosenXAxis) {
   // create scales
   var xLinearScale = d3.scaleLinear()
-    .domain([ d3.min(data, d => d[chosenXAxis]) * 0.8,
-              d3.max(data, d => d[chosenXAxis]) * 1.2
+    .domain([ d3.min(data, d => d[chosenXAxis]) + axesArray[chosenXAxis].domain[0],
+              d3.max(data, d => d[chosenXAxis]) + axesArray[chosenXAxis].domain[1]
             ])
     .range([0, width]);
   return xLinearScale;
 }
 
  
-const axesArray = {
-  poverty:   { axis: "x", domain:[ 0, 0], range:[ 0, width], tooltip: "Poverty"  },
-  age:       { axis: "x", domain:[ 0, 0], range:[ 0, width], tooltip: "Age"      },
-  income:    { axis: "x", domain:[ 0, 0], range:[ 0, width], tooltip: "Household"},
-  obesity:   { axis: "y", domain:[-2, 4], range:[ 0, width], tooltip: "Poverty"  },
-  smokes:    { axis: "y", domain:[-1, 2], range:[ 0, width], tooltip: "Age"      },
-  healthcare:{ axis: "y", domain:[-1, 2], range:[ 0, width], tooltip: "Household"},
-};
-
 // function used for updating y-scale var upon click on axis label
 function yScale(data, chosenYAxis) {
 
@@ -127,14 +126,6 @@ function yRenderCircles(circlesGroup, newYScale, chosenYAxis, textGroup) {
 // function used for updating circles group with new tooltip
 function updateToolTip(chosenXAxis, circlesGroup) {
 
-  // if (chosenXAxis === "hair_length") {
-  //   var label = "Hair Length:";
-  // }
-  // else {
-  //   var label = "# of Albums:";
-  // }
-// console.log("here", chosenXAxis, axesArray["porverty"].tooltip);
-
   var toolTip = d3.tip()
     .attr("class", "d3-tip")
     .offset([80, -60])
@@ -178,9 +169,11 @@ d3.csv("./assets/data/data.csv")
     // ==============================
     // Initial scale for X axis
     var xLinearScale = d3.scaleLinear()
-      .domain([d3.min(data, d => d.poverty) - 1, (d3.max(data, d => d.poverty) + 1)])
+      .domain([ d3.min(data, d => d.poverty)  + axesArray.poverty.domain[0] , 
+                d3.max(data, d => d.poverty)  + axesArray.poverty.domain[1]  ])
       .range([0, width ]);
-    // Initial scale for y axis
+      
+    // Initial scale for Y axis
     var yLinearScale = d3.scaleLinear()
       .domain([ d3.min(data, d => d.healthcare + axesArray.healthcare.domain[0] ),
                 d3.max(data, d => d.healthcare + axesArray.healthcare.domain[1] )])
