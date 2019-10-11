@@ -15,7 +15,9 @@ const margin = {
 const width = svgW - margin.left - margin.right;
 const height = svgH - margin.top - margin.bottom;
 
-
+// Set initial values to X and Y axes selected.
+var chosenXAxis = "poverty";
+var chosenYAxis = "healthcare";
 
 // Functions to toggle active / inactive
 let toggle = (axisLabel, value) => { 
@@ -38,12 +40,12 @@ var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 const axesArray = {
-  poverty:   { axis: "x", domain:[-1, 1], range:[ 0, width], tooltip: "Poverty"  },
-  age:       { axis: "x", domain:[-1, 1], range:[ 0, width], tooltip: "Age"      },
-  income:    { axis: "x", domain:[-2000, 2000], range:[ 0, width], tooltip: "Household"},
-  obesity:   { axis: "y", domain:[-2, 4], range:[ 0, width], tooltip: "Poverty"  },
-  smokes:    { axis: "y", domain:[-1, 2], range:[ 0, width], tooltip: "Age"      },
-  healthcare:{ axis: "y", domain:[-1, 2], range:[ 0, width], tooltip: "Household"},
+  poverty:   { axis: "x", domain:[-1   ,    1], tooltip: "Poverty"   },
+  age:       { axis: "x", domain:[-1   ,    1], tooltip: "Age"       },
+  income:    { axis: "x", domain:[-2000, 2000], tooltip: "Household" },
+  obesity:   { axis: "y", domain:[-2   ,    4], tooltip: "Obesity"   },
+  smokes:    { axis: "y", domain:[-1   ,    2], tooltip: "Smokes"    },
+  healthcare:{ axis: "y", domain:[-1   ,    2], tooltip: "Healthcare"},
 };
   
 /*********************************************************************************************************************************** */
@@ -124,13 +126,16 @@ function yRenderCircles(circlesGroup, newYScale, chosenYAxis, textGroup) {
 
 
 // function used for updating circles group with new tooltip
-function updateToolTip(chosenXAxis, circlesGroup) {
+function updateToolTip(circlesGroup) {
 
+
+  console.log("chosenXAxis", chosenXAxis);
+  console.log("chosenYAxis", chosenYAxis);
   var toolTip = d3.tip()
     .attr("class", "d3-tip")
     .offset([80, -60])
     .html(function(d) {
-      return (`${d.state}<br>${chosenXAxis}: ${d[chosenXAxis]}%<br>healthcare: ${d.healthcare}%`);
+      return (`${d.state}<br>${axesArray[chosenXAxis].tooltip}: ${d[chosenXAxis]}%<br>${axesArray[chosenYAxis].tooltip}: ${d[chosenYAxis]}%`);
     });
 
   circlesGroup.call(toolTip);
@@ -219,7 +224,7 @@ d3.csv("./assets/data/data.csv")
     .attr("class","stateText")
 
     // updateToolTip function above csv import
-    circlesGroup = updateToolTip("poverty", circlesGroup);
+    circlesGroup = updateToolTip(circlesGroup);
 
     // Step 10: Create Axes labels
     // ==============================    
@@ -255,18 +260,12 @@ d3.csv("./assets/data/data.csv")
       xLabelsGroup.selectAll("text")
       .on("click", function() {
 
-        // console.log("Clicked", d3.select(this).attr("value"));
-        // console.log("Clicked", d3.select(this).classed("inactive"));
-
         // get value of selection
-        var value = d3.select(this).attr("value");
+        chosenXAxis = d3.select(this).attr("value");
+
+        // Verify if the axis had already selected.
         var activate = d3.select(this).classed("inactive");
         if (activate) {
-
-          // replaces chosenXAxis with value
-          var chosenXAxis = value;
-
-          // console.log(chosenXAxis)
 
           // functions here found above csv import
           // updates x scale for new data
@@ -279,12 +278,12 @@ d3.csv("./assets/data/data.csv")
           circlesGroup = xRenderCircles(circlesGroup, xLinearScale, chosenXAxis, textGroup);
 
           // updates tooltips with new info
-          circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
+          circlesGroup = updateToolTip(circlesGroup);
 
           // Set active/inactive classes according to the selected axis
-          toggle(lPoverty,   value);
-          toggle(lAge,       value);
-          toggle(lHousehold, value);
+          toggle(lPoverty,   chosenXAxis);
+          toggle(lAge,       chosenXAxis);
+          toggle(lHousehold, chosenXAxis);
         }
       });
 
@@ -326,15 +325,10 @@ d3.csv("./assets/data/data.csv")
      .on("click", function() {
 
        // get value of selection
-       var value = d3.select(this).attr("value");
+       chosenYAxis = d3.select(this).attr("value");
        var activate = d3.select(this).classed("inactive");
 
        if (activate) {
-
-         // replaces chosenYAxis with value
-         var chosenYAxis = value;
-
-         // console.log(chosenYAxis)
 
          // functions here found above csv import
          // updates y scale for new data
@@ -347,12 +341,12 @@ d3.csv("./assets/data/data.csv")
          circlesGroup = yRenderCircles(circlesGroup, yLinearScale, chosenYAxis, textGroup);
 
          // updates tooltips with new info
-         circlesGroup = updateToolTip(chosenYAxis, circlesGroup);
+         circlesGroup = updateToolTip(circlesGroup);
 
          // Set active/inactive classes according to the selected axis
-         toggle(lHealthcare,value);
-         toggle(lSmokes,    value);
-         toggle(lObese,     value);
+         toggle(lHealthcare,chosenYAxis);
+         toggle(lSmokes,    chosenYAxis);
+         toggle(lObese,     chosenYAxis);
        }
      });
 
