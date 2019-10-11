@@ -50,7 +50,7 @@ const axesArray = {
   
 /*********************************************************************************************************************************** */
 // function used for updating x-scale var upon click on axis label
-function xScale(data, chosenXAxis) {
+function xScale(data) {
   // create scales
   var xLinearScale = d3.scaleLinear()
     .domain([ d3.min(data, d => d[chosenXAxis]) + axesArray[chosenXAxis].domain[0],
@@ -62,9 +62,7 @@ function xScale(data, chosenXAxis) {
 
  
 // function used for updating y-scale var upon click on axis label
-function yScale(data, chosenYAxis) {
-
-  console.log("Final test",axesArray[chosenYAxis].domain[0]);
+function yScale(data) {
 
   // create scales
   var yLinearScale = d3.scaleLinear()
@@ -111,7 +109,7 @@ function xRenderCircles(circlesGroup, newXScale, chosenXAxis, textGroup) {
 }
 
 // function used for updating y axis circles group
-function yRenderCircles(circlesGroup, newYScale, chosenYAxis, textGroup) {
+function yRenderCircles(circlesGroup, newYScale, textGroup) {
 
   circlesGroup.transition()
     .duration(1000)
@@ -128,9 +126,6 @@ function yRenderCircles(circlesGroup, newYScale, chosenYAxis, textGroup) {
 // function used for updating circles group with new tooltip
 function updateToolTip(circlesGroup) {
 
-
-  console.log("chosenXAxis", chosenXAxis);
-  console.log("chosenYAxis", chosenYAxis);
   var toolTip = d3.tip()
     .attr("class", "d3-tip")
     .offset([80, -60])
@@ -269,7 +264,7 @@ d3.csv("./assets/data/data.csv")
 
           // functions here found above csv import
           // updates x scale for new data
-          xLinearScale = xScale(data, chosenXAxis);
+          xLinearScale = xScale(data);
 
           // updates x axis with transition
           xAxis = xRenderAxes(xLinearScale, xAxis);
@@ -332,13 +327,13 @@ d3.csv("./assets/data/data.csv")
 
          // functions here found above csv import
          // updates y scale for new data
-         yLinearScale = yScale(data, chosenYAxis);
+         yLinearScale = yScale(data);
 
          // updates y axis with transition
          yAxis = yRenderAxes(yLinearScale, yAxis);
 
          // updates circles with new x values
-         circlesGroup = yRenderCircles(circlesGroup, yLinearScale, chosenYAxis, textGroup);
+         circlesGroup = yRenderCircles(circlesGroup, yLinearScale, textGroup);
 
          // updates tooltips with new info
          circlesGroup = updateToolTip(circlesGroup);
