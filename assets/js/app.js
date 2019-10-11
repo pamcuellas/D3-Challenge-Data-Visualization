@@ -1,7 +1,7 @@
 /* jshint esversion: 6*/
 
 /*******  Global variables ******/
-// Define svg width and height
+// Define area for svg width and height
 const svgW = 800;
 const svgH = 550;
 // Define Margins
@@ -15,11 +15,7 @@ const margin = {
 const width = svgW - margin.left - margin.right;
 const height = svgH - margin.top - margin.bottom;
 
-const axesArray = {
-  porverty: { axis: "x", domain:[-1,1 ], range:[ 0, width], tooltip: "Poverty"  },
-  age:      { axis: "x", domain:[-1,1 ], range:[ 0, width], tooltip: "Age"      },
-  household:{ axis: "x", domain:[-1,1 ], range:[ 0, width], tooltip: "Household"},
-};
+
 
 // Functions to toggle active / inactive
 let toggle = (axisLabel, value) => { 
@@ -54,24 +50,27 @@ function xScale(data, chosenXAxis) {
   return xLinearScale;
 }
 
+ 
+const axesArray = {
+  poverty:   { axis: "x", domain:[ 0, 0], range:[ 0, width], tooltip: "Poverty"  },
+  age:       { axis: "x", domain:[ 0, 0], range:[ 0, width], tooltip: "Age"      },
+  income:    { axis: "x", domain:[ 0, 0], range:[ 0, width], tooltip: "Household"},
+  obesity:   { axis: "y", domain:[-2, 4], range:[ 0, width], tooltip: "Poverty"  },
+  smokes:    { axis: "y", domain:[-1, 2], range:[ 0, width], tooltip: "Age"      },
+  healthcare:{ axis: "y", domain:[-1, 2], range:[ 0, width], tooltip: "Household"},
+};
+
 // function used for updating y-scale var upon click on axis label
 function yScale(data, chosenYAxis) {
-  // create scales
 
+  console.log("Final test",axesArray[chosenYAxis].domain[0]);
+
+  // create scales
   var yLinearScale = d3.scaleLinear()
-      .domain([ d3.min(data, d => d[chosenYAxis]),
-                d3.max(data, d => d[chosenYAxis])
+      .domain([ d3.min(data, d => d[chosenYAxis] + axesArray[chosenYAxis].domain[0] ),
+                d3.max(data, d => d[chosenYAxis] + axesArray[chosenYAxis].domain[1] )
               ])
       .range([height , 0]);
-
-    // .domain([2, (d3.max(data, d => d.healthcare) + 2) ])
-    // .range([height , 0]);
-
-  // var yLinearScale = d3.scaleLinear()
-  //   .domain([ d3.min(data, d => d[chosenYAxis]) * 0.8,
-  //             d3.max(data, d => d[chosenYAxis]) * 1.2
-  //           ])
-  //   .range([0, width]);
 
   return yLinearScale;
 }
@@ -177,13 +176,16 @@ d3.csv("./assets/data/data.csv")
 
     // Step 2: Create scale functions
     // ==============================
+    // Initial scale for X axis
     var xLinearScale = d3.scaleLinear()
       .domain([d3.min(data, d => d.poverty) - 1, (d3.max(data, d => d.poverty) + 1)])
       .range([0, width ]);
-
+    // Initial scale for y axis
     var yLinearScale = d3.scaleLinear()
-      .domain([2, (d3.max(data, d => d.healthcare) + 2) ])
+      .domain([ d3.min(data, d => d.healthcare + axesArray.healthcare.domain[0] ),
+                d3.max(data, d => d.healthcare + axesArray.healthcare.domain[1] )])
       .range([height , 0]);
+
 
     // Step 3: Create axis functions
     // ==============================
