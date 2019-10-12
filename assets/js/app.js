@@ -11,6 +11,7 @@ const margin = {
   bottom: 110,
   left: 100
 };
+
 // Define width and height to scale subtracting the  margins
 const width = svgW - margin.left - margin.right;
 const height = svgH - margin.top - margin.bottom;
@@ -39,7 +40,7 @@ var svg = d3.select("#scatter")
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-// Array to help fits Axes scales and the tooltip.
+// Array to help fit Axes scales and the tooltip.
 const axesArray = {
   poverty:   { domain:[-1   ,    1], tooltip: "Poverty"   },
   age:       { domain:[-1   ,    1], tooltip: "Age"       },
@@ -114,7 +115,7 @@ function yRenderCircles(circlesGroup, newYScale, textGroup) {
 
     textGroup.transition()
     .duration(1000) 
-    .attr('dy', d => newYScale(d[chosenYAxis]));
+    .attr('dy', d => newYScale(d[chosenYAxis]) + 5);
     
   return circlesGroup;
 }
@@ -159,8 +160,6 @@ d3.csv("./assets/data/data.csv")
       data.income     = +data.income;
       data.age        = +data.age;
     });
-
-    console.log(data);
 
     // Create scale functions
     // ==============================
@@ -211,15 +210,14 @@ d3.csv("./assets/data/data.csv")
     .append('text')
     .text(d => d.abbr ) 
     .attr('dx', d => xLinearScale(d.poverty))
-    .attr('dy', d => yLinearScale(d.healthcare)+4)
-    .attr("class","stateText")
+    .attr('dy', d => yLinearScale(d.healthcare) + 5)
+    .attr("class","stateText");
 
     // updateToolTip function above csv import
     circlesGroup = updateToolTip(circlesGroup);
 
-    // Create Axes labels
-    // ==============================    
     // Create group for  3 x- axis labels
+    //=====================================
     var xLabelsGroup = chartGroup.append("g")
         .attr("transform", `translate(${width / 2}, ${height + 20})`);  
     
@@ -278,6 +276,7 @@ d3.csv("./assets/data/data.csv")
       });
 
     // Create group for  3 Y - axis labels
+    //=====================================
     var yLabelsGroup = chartGroup.append("g")
       .attr("transform", "rotate(-90)"); 
 
