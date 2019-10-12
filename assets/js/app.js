@@ -3,13 +3,13 @@
 /*******  Global variables ******/
 // Define area for svg width and height
 const svgW = 800;
-const svgH = 550;
+const svgH = 570;
 // Define Margins
 const margin = {
-  top: 35,
+  top: 20,
   right: 40,
   bottom: 110,
-  left: 100
+  left: 80
 };
 
 // Define width and height to scale subtracting the  margins
@@ -43,12 +43,12 @@ var chartGroup = svg.append("g")
 
 
 // Create a title
-svg
-.append("text")
-.attr("x", (svgW + margin.right)/ 2)
-.attr("y", 15 )
-.attr("class", "title")
-.text("Correlations Discovered Between Health Risks and Age, Income");
+// svg
+// .append("text")
+// .attr("x", (svgW + margin.right)/ 2)
+// .attr("y", 15 )
+// .attr("class", "title")
+// .text("Correlations Discovered Between Health Risks and Age, Income");
 
 // Array to help fit Axes scales and the tooltip.
 const axesArray = {
@@ -249,7 +249,7 @@ d3.csv("./assets/data/data.csv")
     .append("circle")
     .attr("cx", d => xLinearScale(d.poverty))
     .attr("cy", d => yLinearScale(d.healthcare) )
-    .attr("r", "15")
+    .attr("r", "13")
     .attr("class", "stateCircle")
     .attr("opacity", ".6");
 
