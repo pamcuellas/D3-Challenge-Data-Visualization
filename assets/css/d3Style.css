@@ -1,3 +1,18 @@
+.D3Times {
+  font-size: 2.5rem;
+  padding: 0;
+  margin:0;
+  font-weight: bolder;
+}
+
+.title{
+  font-size: 1.3em;
+  font-weight: bold;
+  text-anchor: middle;
+  fill: #006f9a;
+  opacity: 0.7;  
+}
+
 .tick line {
   stroke-dasharray: 10, 5;
 }
