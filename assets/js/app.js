@@ -6,7 +6,7 @@ const svgW = 800;
 const svgH = 550;
 // Define Margins
 const margin = {
-  top: 20,
+  top: 35,
   right: 40,
   bottom: 110,
   left: 100
@@ -36,32 +36,28 @@ var svg = d3.select("#scatter")
   .append("svg")
   .attr("width", svgW)
   .attr("height", svgH);
-
-// Create a title
-  svg
-  .append("text")
-  .attr("x", (svgW + margin.right)/ 2)
-  .attr("y", 15 )
-  .attr("font-size", "1.3em")
-  .attr("font-weight", "bold")
-  .style("text-anchor", "middle")
-  .attr("fill", "#05668D")
-  .style("opacity", "0.7")
-  .text("Correlations Discovered Between Health Risks and Age, Income");
-
   
-
+// Flip SVG
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
+
+// Create a title
+svg
+.append("text")
+.attr("x", (svgW + margin.right)/ 2)
+.attr("y", 15 )
+.attr("class", "title")
+.text("Correlations Discovered Between Health Risks and Age, Income");
+
 // Array to help fit Axes scales and the tooltip.
 const axesArray = {
-  poverty:   { domain:[-1   ,    1], tooltip: "Poverty"   },
-  age:       { domain:[-1   ,    1], tooltip: "Age"       },
-  income:    { domain:[-2000, 2000], tooltip: "Household" },
-  obesity:   { domain:[-2   ,    4], tooltip: "Obesity"   },
-  smokes:    { domain:[-1   ,    2], tooltip: "Smokes"    },
-  healthcare:{ domain:[-1   ,    2], tooltip: "Healthcare"},
+  poverty:   { domain:[-1   ,    1], tooltip: "Poverty"   , fmt:"%"},
+  age:       { domain:[-1   ,    1], tooltip: "Age"       , fmt:""},
+  income:    { domain:[-2000, 2000], tooltip: "Household" , fmt:""},
+  obesity:   { domain:[-2   ,    4], tooltip: "Obesity"   , fmt:"%"},
+  smokes:    { domain:[-1   ,    2], tooltip: "Smokes"    , fmt:"%"},
+  healthcare:{ domain:[-1   ,    2], tooltip: "Healthcare", fmt:"%"},
 };
   
 /*********************************************************************************************************************************** */
@@ -173,8 +169,10 @@ function updateToolTip(circlesGroup) {
   var toolTip = d3.tip()
     .attr("class", "d3-tip")
     .offset([80, -60])
-    .html(function(d) {
-      return (`${d.state}<br>${axesArray[chosenXAxis].tooltip}: ${d[chosenXAxis]}%<br>${axesArray[chosenYAxis].tooltip}: ${d[chosenYAxis]}%`);
+    .html(function(d) { 
+      var xValue = (axesArray[chosenXAxis].fmt === "") ?  d[chosenXAxis].toLocaleString() : d[chosenXAxis];
+      return (`${d.state}<br>${axesArray[chosenXAxis].tooltip}: ${xValue}${axesArray[chosenXAxis].fmt}
+                         <br>${axesArray[chosenYAxis].tooltip}: ${d[chosenYAxis]}${axesArray[chosenYAxis].fmt}`);
     });
 
   circlesGroup.call(toolTip);
