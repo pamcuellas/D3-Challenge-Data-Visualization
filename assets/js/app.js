@@ -37,6 +37,20 @@ var svg = d3.select("#scatter")
   .attr("width", svgW)
   .attr("height", svgH);
 
+// Create a title
+  svg
+  .append("text")
+  .attr("x", (svgW + margin.right)/ 2)
+  .attr("y", 15 )
+  .attr("font-size", "1.3em")
+  .attr("font-weight", "bold")
+  .style("text-anchor", "middle")
+  .attr("fill", "#05668D")
+  .style("opacity", "0.7")
+  .text("Correlations Discovered Between Health Risks and Age, Income");
+
+  
+
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
@@ -73,22 +87,55 @@ function yScale(data) {
   return yLinearScale;
 }
 
+// Function to set style for ticks
+function styleTicks (axis) {
+  axis.selectAll("line")
+    .style("stroke", "#028090")
+    .style("opacity", "0.3")
+    .attr("stroke-width","1");
+
+}
+// Function to set style for Axes
+function styleAxes (axis) {
+  axis.attr("class", "axes");
+}
+
+
 // function used for updating xAxis var upon click on axis label
 function xRenderAxes(newXScale, xAxis) {
-  var bottomAxis = d3.axisBottom(newXScale);
+  var bottomAxis = d3.axisBottom(newXScale)
+    .tickSize( - height + 2 )
+    .tickSizeOuter(0);
+ 
+  // Style X axis
+  styleAxes(xAxis);
+
   xAxis.transition()
     .duration(1000)
     .call(bottomAxis);
+
+  // Style stick
+  styleTicks(xAxis);
+
   return xAxis;
 }
 
 // function used for updating yAxis var upon click on axis label
 function yRenderAxes(newYScale, yAxis) {
-  var leftAxis = d3.axisLeft(newYScale);
+  var leftAxis = d3.axisLeft(newYScale) 
+    .tickSize( - width + 2 )
+    .tickSizeOuter(0);
+
+  // Style Y axis
+  styleAxes(yAxis);
 
   yAxis.transition()
     .duration(1000)
     .call(leftAxis);
+
+  // Style stick
+  styleTicks(yAxis);
+
   return yAxis;
 }
 
@@ -120,7 +167,6 @@ function yRenderCircles(circlesGroup, newYScale, textGroup) {
   return circlesGroup;
 }
 
-
 // function used for updating circles group with new tooltip
 function updateToolTip(circlesGroup) {
 
@@ -132,7 +178,6 @@ function updateToolTip(circlesGroup) {
     });
 
   circlesGroup.call(toolTip);
-
   circlesGroup.on("mouseover", function(data) {
     toolTip.show(data, this);
   })
@@ -177,17 +222,26 @@ d3.csv("./assets/data/data.csv")
 
     // Create axis functions
     // ==============================
-    var bottomAxis = d3.axisBottom(xLinearScale);
-    var leftAxis = d3.axisLeft(yLinearScale);
+    var bottomAxis = d3.axisBottom(xLinearScale)
+          .tickSize( - height + 2 )
+          .tickSizeOuter(0);
+
+    var leftAxis = d3.axisLeft(yLinearScale)
+          .tickSize( - width + 2 )
+          .tickSizeOuter(0);
 
     // Append Axes to the chart
     // ==============================
     var xAxis = chartGroup.append("g")
       .attr("transform", `translate(0, ${height})`)
       .call(bottomAxis);
+    styleAxes(xAxis);
+    styleTicks(xAxis);
 
     var yAxis = chartGroup.append("g")
       .call(leftAxis);
+    styleAxes(yAxis);
+    styleTicks(yAxis);
 
     // Create Circles
     // ==============================
@@ -199,7 +253,7 @@ d3.csv("./assets/data/data.csv")
     .attr("cy", d => yLinearScale(d.healthcare) )
     .attr("r", "15")
     .attr("class", "stateCircle")
-    .attr("opacity", ".8");
+    .attr("opacity", ".6");
 
     // Create the Text Circles (states)
     // ========================================
