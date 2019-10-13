@@ -9,7 +9,7 @@ const margin = {
   top: 20,
   right: 40,
   bottom: 110,
-  left: 80
+  left: 100
 };
 
 // Define width and height to scale subtracting the  margins
@@ -40,15 +40,6 @@ var svg = d3.select("#scatter")
 // Flip SVG
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
-
-// Create a title
-// svg
-// .append("text")
-// .attr("x", (svgW + margin.right)/ 2)
-// .attr("y", 15 )
-// .attr("class", "title")
-// .text("Correlations Discovered Between Health Risks and Age, Income");
 
 // Array to help fit Axes scales and the tooltip.
 const axesArray = {
