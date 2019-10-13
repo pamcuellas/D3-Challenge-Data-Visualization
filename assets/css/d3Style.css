@@ -90,6 +90,13 @@
 }
 
 /* Mobile Rules */
+@media screen and (max-width: 1200px) {
+  .row {
+    display: flex!important;
+    flex-direction: column!important; 
+    justify-content: center;
+  }
+}
 @media screen and (max-width: 530px) {
   .stateText {
     display: none;
