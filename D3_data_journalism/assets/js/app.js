@@ -182,7 +182,7 @@ function updateToolTip(circlesGroup) {
 /*********************************************************************************************************************************** */
 // Get the Data and plot the initial graph
 // =======================================
-d3.csv("./assets/data/data.csv")
+d3.csv("./D3_data_journalism/assets/data/data.csv")
   .then(function(data) {
 
     // Parse Data/Cast as numbers
