@@ -162,8 +162,9 @@ function updateToolTip(circlesGroup) {
     .offset([80, -60])
     .html(function(d) { 
       var xValue = (axesArray[chosenXAxis].fmt === "") ?  d[chosenXAxis].toLocaleString() : d[chosenXAxis];
-      return (`${d.state}<br>${axesArray[chosenXAxis].tooltip}: ${xValue}${axesArray[chosenXAxis].fmt}
-                         <br>${axesArray[chosenYAxis].tooltip}: ${d[chosenYAxis]}${axesArray[chosenYAxis].fmt}`);
+      return (`<strong style="font-size: 15px;">${d.state}</strong>
+              <br>${axesArray[chosenXAxis].tooltip}: ${xValue}${axesArray[chosenXAxis].fmt}
+              <br>${axesArray[chosenYAxis].tooltip}: ${d[chosenYAxis]}${axesArray[chosenYAxis].fmt}`);
     });
 
   circlesGroup.call(toolTip);
